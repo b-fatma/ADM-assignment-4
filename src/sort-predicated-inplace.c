@@ -1,11 +1,10 @@
-// include standard headers
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 #include <sys/time.h>
 #include <limits.h>
 
-// TODO: YOUR "predicated" in-place sort implementation
+// predicated in-place sort implementation
 void swap(int *a, int *b) {
     int temp = *a;
     *a = *b;
@@ -13,26 +12,16 @@ void swap(int *a, int *b) {
 }
 
 void sort_predicated_inplace(int N, int *data_array) {
-    int i, j, min_idx, x, y;
+    int i, j, s;
 
-    // One by one move boundary of the unsorted subarray
-    for (i = 0; i < N - 1; i++) {
-        // Find the minimum element in the unsorted array
-        min_idx = i;
-        for (j = i + 1; j < N; j++) {
-            // Use conditional swaps to reduce branch mispredictions
-            x = (data_array[j] < data_array[min_idx]);
-            y = !x;
-
-            // Update min_idx using conditional assignments
-            min_idx = j * x + min_idx * y;
-        }
-
-        // Swap the found minimum element with the first element
-        if (min_idx != i) {
-            swap(&data_array[min_idx], &data_array[i]);
-        }
+    for (i = 0; i < N-1; i++) {
+        for(j = 0; j < N-i-1; j++) {
+			s = data_array[j] > data_array[j+1];
+			swap(&data_array[j], &data_array[j+s]);			
+		}
     }
+	return;
+	
 }
 
 // main program
@@ -178,12 +167,12 @@ int main( int argc , char ** argv ) {
 
 	// output sorted data array to console (stdout)
 	// (one value per line)
-	/*for ( int i = 0 ; i < N ; i++ ) {
+	for ( int i = 0 ; i < N ; i++ ) {
 		printf(
 			"%d\n" ,
 			data_array[ i ]
 		);
-	}*/
+	}
 
 	// free allocated memory
 	free( data_array );
