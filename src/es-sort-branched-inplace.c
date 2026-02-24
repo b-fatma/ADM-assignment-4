@@ -3,25 +3,35 @@
 #include <string.h>
 #include <sys/time.h>
 #include <limits.h>
+#include <stdbool.h>
 
-// predicated in-place sort implementation
-void swap(int *a, int *b) {
-    int temp = *a;
-    *a = *b;
-    *b = temp;
+
+
+// branched early stopped in-place sort implementation
+void swap(int *xp, int *yp)
+{
+    int temp = *xp;
+    *xp = *yp;
+    *yp = temp;
 }
 
-void sort_predicated_inplace(int N, int *data_array) {
-    int i, j, s;
-
+void sort_branched_inplace( int N , int *data_array ) {
+    int i, j;
+	bool swapped;
+ 
     for (i = 0; i < N-1; i++) {
+		swapped = false;
         for(j = 0; j < N-i-1; j++) {
-			s = data_array[j] > data_array[j+1];
-			swap(&data_array[j], &data_array[j+s]);			
+			if(data_array[j] > data_array[j+1]) {
+				swapped = true;
+				swap(&data_array[j], &data_array[j+1]);
+			}
 		}
+
+		if(swapped == false)
+			break;
     }
 	return;
-	
 }
 
 // main program
@@ -136,7 +146,7 @@ int main( int argc , char ** argv ) {
 	// sort data array in-place;
 	// measure the time it takes
 	gettimeofday( &before , NULL );
-	sort_predicated_inplace( N , data_array );
+	sort_branched_inplace( N , data_array );
 	gettimeofday( &after , NULL );
 
 	// check result correctness
@@ -168,7 +178,7 @@ int main( int argc , char ** argv ) {
 	// output sorted data array to console (stdout)
 	// (one value per line)
 	for ( int i = 0 ; i < N ; i++ ) {
-		printf(
+		fprintf(stdout,
 			"%d\n" ,
 			data_array[ i ]
 		);
