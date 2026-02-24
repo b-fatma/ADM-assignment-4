@@ -1,3 +1,4 @@
+// include standard headers
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -6,7 +7,7 @@
 
 
 
-// branched in-place sort implementation
+// TODO: YOUR "branched" in-place sort implementation
 void swap(int *xp, int *yp)
 {
     int temp = *xp;
@@ -15,14 +16,31 @@ void swap(int *xp, int *yp)
 }
 
 void sort_branched_inplace( int N , int *data_array ) {
-    int i, j;
+
+	// TODO:
+	// replace this with your
+	// "branched" in-place sort implementation
+
+	/*for ( int i = 0 , j = N - 1 ; i < N / 2 ; i++ , j-- ) {
+		int v = data_array[ i ];
+		data_array[ i ] = data_array[ j ];
+		data_array[ j ] = v;
+	}*/
+
+    int i, j, min_idx;
  
-    for (i = 0; i < N-1; i++) {
-        for(j = 0; j < N-i-1; j++) {
-			if(data_array[j] > data_array[j+1]) {
-				swap(&data_array[j], &data_array[j+1]);
-			}
-		}
+    // one by one move boundary of unsorted subarray
+    for (i = 0; i < N-1; i++)
+    {
+        // find the minimum element in unsorted array
+        min_idx = i;
+        for (j = i+1; j < N; j++)
+          if (data_array[j] < data_array[min_idx])
+            min_idx = j;
+ 
+        // swap the found minimum element with the first element
+           if(min_idx != i)
+            swap(&data_array[min_idx], &data_array[i]);
     }
 	return;
 }
@@ -170,12 +188,12 @@ int main( int argc , char ** argv ) {
 
 	// output sorted data array to console (stdout)
 	// (one value per line)
-	for ( int i = 0 ; i < N ; i++ ) {
+	/*for ( int i = 0 ; i < N ; i++ ) {
 		printf(
 			"%d\n" ,
 			data_array[ i ]
 		);
-	}
+	}*/
 
 	// free allocated memory
 	free( data_array );
